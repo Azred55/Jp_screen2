@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:jp_screen2/burger.dart';
+import 'package:jp_screen2/glasschip.dart';
+import 'package:jp_screen2/kartei.dart';
+import 'package:jp_screen2/data.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -8,7 +12,9 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  String _selectedCategory = 'Salty';
+  int initialSelected = 0;
+
+  final items = Items.itemsData;
 
   final List<String> _categories = [
     'All categories',
@@ -34,7 +40,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
               SafeArea(
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 17.0),
+                  padding: const EdgeInsets.only(left: 10),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -46,91 +52,48 @@ class _HomeScreenState extends State<HomeScreen> {
                           fontSize: 22,
                           fontWeight: FontWeight.w900,
                           color: Colors.white,
-                          height: 1.1,
+                          height: 1.4,
                         ),
                       ),
                       const SizedBox(height: 20),
-
-                      SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        child: Row(
-                          children: _categories.map((category) {
-                            bool isSelected = category == _selectedCategory;
-                            return Padding(
-                              padding: const EdgeInsets.only(right: 10),
-                              child: _buildCategoryButton(
-                                label: category,
-
-                                icon: category == 'All categories'
-                                    ? Icons.keyboard_arrow_down
-                                    : null,
-                                isSelected: isSelected,
-
-                                onTap: () {
-                                  setState(() {
-                                    _selectedCategory = category;
-                                  });
-                                },
-                              ),
-                            );
-                          }).toList(),
-                        ),
+                      CategorySelector(
+                        categories: _categories,
+                        initialSelected: _categories[initialSelected],
                       ),
 
-                      const SizedBox(height: 30),
+                      const SizedBox(height: 42),
+
+                      GlassCardWidget(),
+                      const SizedBox(height: 47),
+                      const Text(
+                        "We Recommend",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(height: 18),
+
+                      SizedBox(
+                        height: 262,
+                        child: ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          itemCount: items.length,
+                          itemBuilder: (context, index) {
+                            return Padding(
+                              padding: const EdgeInsets.only(left: 20),
+                              child: Kartei(item: items[index]),
+                            );
+                          },
+                        ),
+                      ),
                     ],
                   ),
                 ),
               ),
             ],
           ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildCategoryButton({
-    required String label,
-    required bool isSelected,
-    IconData? icon,
-    required VoidCallback onTap,
-  }) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        decoration: BoxDecoration(
-          color: isSelected ? Colors.white : Colors.white.withOpacity(0.2),
-          borderRadius: BorderRadius.circular(25),
-        ),
-        child: Row(
-          children: [
-            if (icon != null && label == 'All categories')
-              const Icon(
-                Icons.shopping_bag_outlined,
-                color: Colors.white,
-                size: 18,
-              ),
-            if (icon != null && label == 'All categories')
-              const SizedBox(width: 5),
-
-            Text(
-              label,
-              style: TextStyle(
-                color: isSelected ? Colors.black : Colors.white,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-
-            if (icon == Icons.keyboard_arrow_down) ...[
-              const SizedBox(width: 5),
-              Icon(
-                icon,
-                color: isSelected ? Colors.black : Colors.white,
-                size: 18,
-              ),
-            ],
-          ],
         ),
       ),
     );

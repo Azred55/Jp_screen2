@@ -51,7 +51,7 @@ class _MainAppState extends State<MainApp> with SingleTickerProviderStateMixin {
                 left: -32,
                 child: SizedBox(
                   child: Image.asset(
-                    'assets/chick cupcakes_3D.png',
+                    'assets/chick3D.png',
                     width: screenWidth * 1.42,
                     fit: BoxFit.contain,
                   ),
