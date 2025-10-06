@@ -15,7 +15,7 @@ class Kartei extends StatelessWidget {
           context: context,
           isScrollControlled: true,
           backgroundColor: Colors.transparent,
-          builder: (context) => Detail(),
+          builder: (context) => Info(item: item),
         );
       },
       child: Container(
